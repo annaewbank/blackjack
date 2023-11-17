@@ -1,0 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Martian+Mono:wght@500&display=swap");
+
+html {
+  font-size: 20px;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Martian Mono", monospace;
+  height: 100vh;
+  color: #ffffff;
+  text-align: center;
+}
+
+.cards img {
+  height: 175px;
+  width: 125px;
+  margin: 5px;
+}
+
+.btn {
+  width: 150px;
+  height: 50px;
+  font-family: "Martian Mono", monospace;
+  font-size: 20px;
+  background: linear-gradient(to bottom right, #ffffff, #c5c5c5);
+  border: 0px;
+  border-radius: 5px;
+  margin: 7px;
+  cursor: pointer;
+  color: rgb(238, 130, 53);
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+p {
+  font-family: "Martian Mono", monospace;
+  font-size: 30px;
+}
+
+body.normal-background {
+  background-image: linear-gradient(to top, #161616 0%, #292929 100%);
+}
+
+body.win-background {
+  background-color: #46ea4b;
+}
+
+body.lose-background {
+  background-color: #ff5e52;
+}
