@@ -51,16 +51,3 @@ body.win-background {
 body.lose-background {
   background-color: #ff5e52;
 }
-
-@media only screen and (max-width: 600px) {
-  /* Add mobile-specific styles here */
-
-  .btn {
-    width: 25%; /* Make buttons take up the full width on small screens */
-  }
-
-  .cards img {
-    height: auto; /* Make cards scale with the width on small screens */
-    width: 20%;
-  }
-}
