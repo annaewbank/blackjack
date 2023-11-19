@@ -4,7 +4,7 @@
   Game tutorial: Code Blackjack with JavaScript HTML CSS - Kenny Yip Coding (YouTube)
   Modal tutorial: The Complete JavaScript Course 2024: From Zero to Expert! - Jonas Schmedtmann (Udemy)
   Please note, both tutorials were only used as a starting point
-  Date: November 17, 2023
+  Date: November 19, 2023
 */
 
 "use strict";
