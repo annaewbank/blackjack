@@ -1,7 +1,9 @@
 /*
   Codeworks Blackjack Game
   Developed by: Anna Ewbank
-  Initial tutorial: Code Blackjack with JavaScript HTML CSS - Kenny Yip Coding (YouTube)
+  Game tutorial: Code Blackjack with JavaScript HTML CSS - Kenny Yip Coding (YouTube)
+  Modal tutorial: The Complete JavaScript Course 2024: From Zero to Expert! - Jonas Schmedtmann (Udemy)
+  Please note, both tutorials were only used as a starting point
   Date: November 17, 2023
 */
 
@@ -31,15 +33,23 @@ const replayButton = document.getElementById("new-game");
 let playerCanHit = true; // Allows the player to draw while playerRoundScore < 21
 let standButtonClicked = false; // Replay button can be clicked when standButtonClicked = true
 
+// Player variables
 const playerCards = document.getElementById("your-cards");
 let playerAceCount = 0; // Tracks how many aces the player has
 let playerRoundScore;
 
+// Dealer variables
 const dealerCards = document.getElementById("dealer-cards");
 let dealerHiddenCard; // Tracks the dealer's hidden card
 let dealerHiddenCardImg = document.getElementById("hidden");
 let dealerAceCount = 0; // Tracks how many aces the dealer has
 let dealerRoundScore;
+
+// Modal variables
+const rulesButton = document.getElementById("rules-modal");
+const rulesModal = document.querySelector(".modal");
+const overlay = document.querySelector(".overlay");
+const closeModalButton = document.querySelector(".close-modal");
 
 // FUNCTIONS
 // Function to build the deck
@@ -66,7 +76,7 @@ const shuffleDeck = function () {
 const getCardValue = function (card) {
   let [cardValue, cardSuit] = card.split("-");
 
-  // If A, J, Q, K, assign 11 or 10 , else, assign value
+  // If A, J, Q, K, assign 11 or 10 , else, assign face value
   if (
     cardValue == "A" ||
     cardValue == "J" ||
@@ -92,7 +102,7 @@ const checkIfAce = function (card) {
   }
 };
 
-// Function to reduce the value of A from 11 to 1 when score < 21
+// Function to reduce the value of A from 11 to 1 when score > 21
 const reducePlayerAce = function (roundScore, aceCount) {
   while (roundScore > 21 && aceCount > 0) {
     roundScore -= 10;
@@ -104,7 +114,7 @@ const reducePlayerAce = function (roundScore, aceCount) {
   return roundScore;
 };
 
-// Function to reduce the value of A from 11 to 1 when score < 21
+// Function to reduce the value of A from 11 to 1 when score > 21
 const reduceDealerAce = function (roundScore, aceCount) {
   while (roundScore > 21 && aceCount > 0) {
     roundScore -= 10;
@@ -124,10 +134,11 @@ const updateRoundScore = function (whichPlayer) {
 
 // Function to deal a card
 const dealACard = function (whichPlayer) {
-  let cardImg = document.createElement("img"); // Creates img tag: <img>
-  let newCard = deck.pop();
-  cardImg.src = "./cards/" + newCard + ".png"; // Assign a source to the img tag
-  document.getElementById(whichPlayer + "-cards").append(cardImg); // Append new img tag to the dealer-cards element
+  let cardImg = document.createElement("img"); // Creates an img tag <img>
+  let newCard = deck.pop(); // Assigns newCard variable a value from the deck
+  cardImg.src = "./cards/" + newCard + ".png"; // Assigns a source to the img tag
+  document.getElementById(whichPlayer + "-cards").append(cardImg); // Appends new img tag to either the player-cards or dealer-cards element
+
   if (whichPlayer === "dealer") {
     dealerRoundScore += getCardValue(newCard);
     dealerAceCount += checkIfAce(newCard);
@@ -139,21 +150,21 @@ const dealACard = function (whichPlayer) {
     playerRoundScore = reducePlayerAce(playerRoundScore, playerAceCount);
     updateRoundScore("player");
 
+    // Stop round if player goes bust
     if (playerRoundScore > 21) {
       document.getElementById("results").innerText = "Bust!\nDealer wins.";
       document.body.classList.remove("normal-background");
       document.body.classList.add("lose-background");
-      // Disable the hit and stand button
-      playerCanHit = false;
-      standButtonClicked = true;
-      replayButton.addEventListener("click", startGame);
+      playerCanHit = false; // Disable the hit button
+      standButtonClicked = true; // Disable the stand button
+      replayButton.addEventListener("click", startGame); // Enable the replay button
     }
   }
 };
 
 // Function for when the hit button is clicked
 const hit = function () {
-  // Disable hit if score > 21
+  // Disable the hit button if score >= 21
   if (playerRoundScore >= 21) {
     playerCanHit = false;
   }
@@ -163,7 +174,7 @@ const hit = function () {
     return;
   }
 
-  dealACard("player");
+  dealACard("player"); // Else, deal a card
 };
 
 // Function for when the stand button is clicked
@@ -173,15 +184,14 @@ const stand = function () {
     return;
   }
 
-  // Disable the hit button
-  playerCanHit = false;
+  playerCanHit = false; // Disable the hit button
 
   // Reveal the hidden card
   document.getElementById("hidden").src =
     "./cards/" + dealerHiddenCard + ".png";
   // Update dealer's score
   dealerRoundScore += getCardValue(dealerHiddenCard);
-  // Reduce score when dealer is dealt 2 x A
+  // Reduce score if dealer is dealt 2 aces
   if (
     dealerRoundScore + getCardValue(dealerHiddenCard) > 21 &&
     dealerAceCount === 2
@@ -189,16 +199,15 @@ const stand = function () {
     dealerRoundScore = 12;
     updateRoundScore("dealer");
   }
-  // Deal cards until dealer's score >= 17
+  // Deal cards until dealer's score < 17
   while (dealerRoundScore < 17) {
     dealACard("dealer");
   }
   // Update dealer's score
   updateRoundScore("dealer");
 
-  // Add results message
+  // Add results message and update background colour
   let message = "";
-
   if (dealerRoundScore > 21) {
     message = "Dealer is bust.\nYou win!";
     document.body.classList.remove("normal-background");
@@ -214,17 +223,14 @@ const stand = function () {
     document.body.classList.remove("normal-background");
     document.body.classList.add("lose-background");
   }
-
   document.getElementById("results").innerText = message;
 
-  standButtonClicked = true;
+  replayButton.addEventListener("click", startGame); // Enable replay button
 
-  replayButton.addEventListener("click", startGame);
+  standButtonClicked = true; // Update standButtonClicked flag so it can't be clicked again
 };
 
-// ---
-
-// Function to start the game
+// Function to start/reset the game
 function startGame() {
   deck = [];
 
@@ -236,11 +242,9 @@ function startGame() {
   document.body.classList.add("normal-background");
   document.body.classList.remove("win-background", "lose-background");
 
-  // Reset round scores to 0
+  // Reset round scores and ace counts to 0
   dealerRoundScore = 0;
   playerRoundScore = 0;
-
-  // Reset ace count
   playerAceCount = 0;
   dealerAceCount = 0;
 
@@ -256,27 +260,49 @@ function startGame() {
   // Remove Replay button event listener
   replayButton.removeEventListener("click", startGame);
 
-  // Assign hidden to the dealer
-  let cardImg = document.createElement("img"); // Creates img tag: <img>
-  dealerHiddenCard = deck.pop();
-  dealerAceCount += checkIfAce(dealerHiddenCard);
-  cardImg.src = "./cards/BACK.png"; // Assign a source to the img tag
-  cardImg.id = "hidden";
-  document.getElementById("dealer-cards").append(cardImg); // Append new img tag to the dealer-cards element
-  // Assign visible card to the dealer
-  dealACard("dealer");
+  // Deal 2 cards to the dealer
+  let cardImg = document.createElement("img"); // Creates an img tag <img>
+  dealerHiddenCard = deck.pop(); // Assigns the dealerHiddenCard variable a value from the deck
+  dealerAceCount += checkIfAce(dealerHiddenCard); // Updates the dealer's ace count
+  cardImg.src = "./cards/BACK.png"; // Assigns a source to the img tag
+  cardImg.id = "hidden"; // Assigns an ID to the img tag
+  document.getElementById("dealer-cards").append(cardImg); // Appends new img tag to the dealer-cards element
+  dealACard("dealer"); // Deal a visible card to the dealer
   updateRoundScore("dealer");
 
-  // Assign 2 cards to the player
+  // Deal 2 cards to the player
   for (let i = 0; i < 2; i++) {
     dealACard("player");
   }
 
-  // Make the hit button functional
+  // Make the hit and stand buttons functional
   hitButton.addEventListener("click", hit);
-
-  // Make the stand button functional
   standButton.addEventListener("click", stand);
 }
 
 startGame();
+
+// MODAL FUNCTIONS
+// Create a function to open the modal
+const openModal = function () {
+  rulesModal.classList.remove("hidden");
+  // classList returns a collection of the element's classes
+  // Note that the dot selector is not used
+  overlay.classList.remove("hidden");
+};
+
+// Create a function to close the modal
+const closeModal = function () {
+  rulesModal.classList.add("hidden");
+  overlay.classList.add("hidden");
+};
+
+// MODAL EVENT LISTENERS
+// Make the rules button functional
+rulesButton.addEventListener("click", openModal);
+
+// Close the modal by clicking the cross button
+closeModalButton.addEventListener("click", closeModal);
+
+// Close the modal by clicking on the overlay
+overlay.addEventListener("click", closeModal);

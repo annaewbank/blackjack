@@ -7,19 +7,56 @@
     <title>Blackjack</title>
   </head>
   <body>
+    <!-- Dealer's cards -->
     <h2>Dealer: <span class="round-score" id="round-score-dealer"></span></h2>
     <div class="cards" id="dealer-cards">
       <img id="hidden" src="/cards/BACK.png" />
     </div>
 
+    <!-- Player's cards -->
     <h2>You: <span class="round-score" id="round-score-player"></span></h2>
     <div class="cards" id="player-cards"></div>
 
-    <br />
+    <!-- Buttons -->
     <button class="btn" id="hit">Hit</button>
     <button class="btn" id="stand">Stand</button>
     <button class="btn" id="new-game">Replay</button>
+
+    <br />
+    <button class="btn" id="rules-modal">Rules</button>
+
+    <!-- Results message -->
+    <br />
     <p id="results"></p>
+
+    <!-- Rules modal window -->
+    <div class="modal hidden">
+      <button class="close-modal">&times;</button>
+      <h1 class="modal-title">The Rules</h1>
+      <p class="modal-text">
+        <h3 class="modal-subtitle">Objective:</h3>
+        <ul>
+          <li>Get a hand value closer to 21 than the dealer, without going bust (over 21)</li>
+        </ul>
+        <h3 class="modal-subtitle">Card Values:</h3>
+        <ul>
+          <li>2-10: face value</li>
+          <li>Royals: 10 points</li>
+          <li>Aces: 1 or 11 points, depending on which
+            value benefits the hand more</li>
+        </ul>
+        <h3 class="modal-subtitle">Gameplay:</h3>
+        <ul>
+          <li>Dealer is dealt two cards, one hidden, one visible</li>
+          <li>Player is dealt two cards, both visible</li>
+          <li>Player chooses to "Hit" (take a card) or "Stand" (keep current hand) to get as close to, but not over, 21</li>
+          <li>If the player busts, the round is immediately over and the dealer wins</li>
+          <li>When the player clicks "Stand", the dealer draws until their hand value is 17 or higher</li>
+          <li>Both hands are compared - the closest to 21, without going bust, wins</li>
+        </ul>
+      </p>
+    </div>
+    <div class="overlay hidden"></div>
 
     <script src="script.js"></script>
   </body>
