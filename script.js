@@ -1,10 +1,10 @@
 /*
   Codeworks Blackjack Game
   Developed by: Anna Ewbank
+  Date: November 19, 2023
   Game tutorial: Code Blackjack with JavaScript HTML CSS - Kenny Yip Coding (YouTube)
   Modal tutorial: The Complete JavaScript Course 2024: From Zero to Expert! - Jonas Schmedtmann (Udemy)
   Please note, both tutorials were only used as a starting point
-  Date: November 19, 2023
 */
 
 "use strict";
@@ -176,9 +176,9 @@ const hit = function () {
   }
 
   dealingInProgress = true; // Set the flag to indicate dealing is in progress
-  dealACard("player"); // Else, deal a card
+  dealACard("player");
 
-  // Enable the hit button after a short delay (adjust the delay as needed)
+  // Enable the hit button after a short delay
   setTimeout(() => {
     dealingInProgress = false;
     playerCanHit = true;
@@ -211,7 +211,7 @@ const stand = function () {
     dealerRoundScore = 12;
     updateRoundScore("dealer");
   }
-  // Deal cards until dealer's score < 17
+  // Deal cards until dealer's score > 17
   while (dealerRoundScore < 17) {
     dealACard("dealer");
   }
@@ -298,8 +298,6 @@ startGame();
 // Create a function to open the modal
 const openModal = function () {
   rulesModal.removeClass("hidden");
-  // classList returns a collection of the element's classes
-  // Note that the dot selector is not used
   overlay.removeClass("hidden");
 };
 
